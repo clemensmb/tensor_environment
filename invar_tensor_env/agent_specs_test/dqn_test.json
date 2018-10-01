@@ -1,0 +1,12 @@
+{
+    "type": "dqn_agent",
+
+    "memory": {
+        "type": "prioritized_replay",
+        "capacity": 10000,
+        "include_next_states": true
+    },
+
+    "discount": 0.99
+
+}
