@@ -183,7 +183,7 @@ class Tensor:
                     corridor[int(slot_range[-1][3] / sd)-1:200, 2] = np.round(slot_range[-1][3] / self.avoid_div_zero(ego_speed), decimals=2)
 
         #return corridor[0:200]
-        #print(corridor[0:200])
+        print(corridor[0:200])
         #tensor = np.ravel(np.transpose(corridor[0:200]))
         tensor = np.reshape(corridor[0:200], 600)
         #print(tensor)

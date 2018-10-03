@@ -1,0 +1,36 @@
+<routes>
+            <vType accel="1.0" decel="5.0" id="Car" length="2.0" maxSpeed="100.0" sigma="0.0" departSpeed="13.89"/>
+            
+            <route id="n2s" edges="gneE2 -gneE3" />
+            <route id="s2n" edges="gneE3 -gneE2" />
+            <route id="w2e" edges="gneE0 -gneE1" />
+            <route id="e2w" edges="gneE1 -gneE0" />
+    
+    <!--
+        
+    <vehicle id="left_0" type="Car" route="w2e" depart="0" />
+    <vehicle id="left_1" type="Car" route="e2w" depart="0" />
+    <vehicle id="right_2" type="Car" route="w2e" depart="1" />
+    <vehicle id="left_3" type="Car" route="e2w" depart="1" />
+    <vehicle id="right_4" type="Car" route="w2e" depart="2" />
+    <vehicle id="left_5" type="Car" route="e2w" depart="2" />
+-->
+    <vehicle id="left_6" type="Car" route="w2e" depart="3" />
+
+    <vehicle id="ego" type="Car" route="s2n" depart="5" />
+    
+    <vehicle id="left_8" type="Car" route="w2e" depart="5" />
+    <vehicle id="left_9" type="Car" route="e2w" depart="5" />
+        <!--
+
+    <vehicle id="right_10" type="Car" route="w2e" depart="6" />
+    <vehicle id="right_11" type="Car" route="e2w" depart="6" />
+    <vehicle id="right_12" type="Car" route="w2e" depart="8" />
+    <vehicle id="right_13" type="Car" route="e2w" depart="8" />
+    <vehicle id="left_14" type="Car" route="w2e" depart="8" />
+    <vehicle id="right_15" type="Car" route="e2w" depart="10" />
+    <vehicle id="left_16" type="Car" route="w2e" depart="10" />
+    <vehicle id="left_17" type="Car" route="e2w" depart="11" />
+    -->
+    
+</routes>

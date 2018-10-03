@@ -75,8 +75,12 @@ if __name__ == "__main__":
 
     #traci.start(['sumo-gui', "-c", "three_lanes/three_lanes.sumocfg", "--start"])
 
-    t_env.generate_routefile_two_intersections()
-    traci.start(['sumo-gui', "-c", "two_intersections/two_intersections.sumocfg", "--start"])
+    # #t_env.generate_routefile_two_intersections()
+    # #traci.start(['sumo-gui', "-c", "two_intersections/two_intersections.sumocfg", "--start"])
+
+    ###
+    traci.start(['sumo-gui', "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
+
 
     #traci.start(['sumo', "-c", "three_lanes/three_lanes.sumocfg"])
 

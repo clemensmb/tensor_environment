@@ -43,7 +43,7 @@ class Assembler:
         step = 0
 
 
-        while traci.simulation.getTime() < 200:
+        while traci.simulation.getTime() < 60:
             traci.simulationStep()
 
             fw = Framework()
@@ -160,9 +160,11 @@ if __name__ == "__main__":
     # if start_gui == 'g':
     #     sumo_command = "sumo-gui"
 
-    traci.start(["sumo-gui", "-c", "two_intersections/two_intersections.sumocfg", "--start"])
+    #traci.start(["sumo-gui", "-c", "two_intersections/two_intersections.sumocfg", "--start"])
     #traci.start(["sumo", "-c", "two_intersections/two_intersections.sumocfg", "--start"])
 
+    traci.start(["sumo-gui", "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
+    # traci.start(["sumo", "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
 
     assemble = Assembler('ego')
     assemble.run('ego')

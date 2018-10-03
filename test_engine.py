@@ -26,8 +26,13 @@ class Engine(Environment):
 
 
     def reset(self):
-        self.generate_routefile_two_intersections()
-        traci.load(["-c", "two_intersections/two_intersections.sumocfg", "--collision.check-junctions", "1", "--start"])
+        ###
+        #self.generate_routefile_two_intersections()
+
+        #traci.load(["-c", "two_intersections/two_intersections.sumocfg", "--collision.check-junctions", "1", "--start"])
+
+        ###
+        traci.load(["-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--collision.check-junctions", "1", "--start"])
 
         run = Assembler(self.carID)
 
@@ -70,6 +75,12 @@ class Engine(Environment):
         for i in range(len(num_vec)):
             if num_vec[i] != 'ego':
                 traci.vehicle.setLaneChangeMode(num_vec[i], 512)
+
+            ###
+            #if i % 2 == 0:
+                traci.vehicle.setSpeedMode(num_vec[i], 23)
+
+
         carID = 'ego'
         act = Action(carID)
         if action == 0:
