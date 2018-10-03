@@ -35,6 +35,7 @@ class Tensor:
     def roundDownTo05(self, number):
         """
         """
+        #print(number)
         return trunc(number * 2) / 2
 
 
@@ -131,6 +132,7 @@ class Tensor:
 
         slot_range = []
         # (dist_to_next_poc, ego_sec_dist, dist_to_pbi, dist_to_pai, interc_ego, real_interc_ego, interc_other, pre_interc_other, post_interc_other, inc, link, outg, index)
+        #print(self.distances)
         for i in range(len(self.distances)):
             if not slot_range:
                 dist, interc_ego, real_interc_ego, interc_other, pre_interc_other, post_interc_other, inc, link, outg, index = self.distances[i]
@@ -142,6 +144,7 @@ class Tensor:
                 dist, interc_ego, real_interc_ego, interc_other, pre_interc_other, post_interc_other, inc, link, outg, index = self.distances[i]
                 #dist = dist - self.distances[i-1][0]
                 ego_sec_dist = self.getEgoSecurityDistance(self.carID, self.relevant_tfc[i][1][0][0])
+                #print(dist, ego_sec_dist)
                 dist_to_pbi = self.roundDownTo05(dist - ego_sec_dist)
                 dist_to_pai = self.roundDownTo05(dist + ego_sec_dist)
                 slot_range.append((dist, ego_sec_dist, dist_to_pbi, dist_to_pai, interc_ego, real_interc_ego, interc_other, pre_interc_other, post_interc_other, inc, link, outg, index))
@@ -183,7 +186,7 @@ class Tensor:
                     corridor[int(slot_range[-1][3] / sd)-1:200, 2] = np.round(slot_range[-1][3] / self.avoid_div_zero(ego_speed), decimals=2)
 
         #return corridor[0:200]
-        print(corridor[0:200])
+        #print(corridor[0:200])
         #tensor = np.ravel(np.transpose(corridor[0:200]))
         tensor = np.reshape(corridor[0:200], 600)
         #print(tensor)

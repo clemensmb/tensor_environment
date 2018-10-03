@@ -86,7 +86,8 @@ if __name__ == "__main__":
 
     env.generate_routefile_two_intersections()
     #traci.start(['sumo-gui', "-c", "two_intersections/two_intersections.sumocfg", "--start"])
-    traci.start(['sumo', "-c", "two_intersections/two_intersections.sumocfg"])
+    #traci.start(['sumo', "-c", "two_intersections/two_intersections.sumocfg"])
+    traci.start(['sumo-gui', "-c", "one_lane/one_lane.sumocfg"])
 
 
 

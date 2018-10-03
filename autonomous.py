@@ -30,7 +30,7 @@ class Autonomous:
         x1, y1 = position1
         x2, y2 = position2
         #try:
-        dist = traci.simulation.getDistance2D(x1, y1, x2, y2, isDriving=True)
+        dist = traci.simulation.getDistance2D(x1, y1, x2, y2, isDriving=False)
         # except:
         #     dist = -1
         return dist
@@ -55,6 +55,8 @@ class Autonomous:
 
             relative_angle = np.absolute(ego_angle - coordinate_angle)
             if relative_angle < 135:
+                #print(ego_position, self.framework[i][0])
+                #self.getDistance(ego_position, self.framework[i][0])
                 distances_to_intercept.append((self.getDistance(ego_position, self.framework[i][0]), interc_ego, real_interc_ego, interc_other, pre_interc_other, post_interc_other, inc, link, outg, index))
 
         return sorted(distances_to_intercept, key=lambda x: x[0])

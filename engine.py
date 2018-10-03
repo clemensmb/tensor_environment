@@ -27,9 +27,9 @@ class Engine(Environment):
 
 
     def reset(self):
-        self.generate_routefile_two_intersections()
-        traci.load(["-c", "two_intersections/two_intersections.sumocfg", "--collision.check-junctions", "1"])
-
+        self.generate_routefile()
+        #traci.load(["-c", "two_intersections/two_intersections.sumocfg", "--collision.check-junctions", "1"])
+        traci.load(["-c", "one_lane/one_lane.sumocfg", "--collision.check-junctions", "1"])
 
         run = Assembler(self.carID)
 
@@ -86,8 +86,9 @@ class Engine(Environment):
 
 
         #win = rew.target()
-        cost = rew.optimum_speed_deviation() #+ win
-        #+ brake
+        brake = rew.emergency_brake()
+
+        cost = rew.optimum_speed_deviation() + brake
         traci.simulationStep()
 
         return self.getObservation(), term, cost

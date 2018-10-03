@@ -57,12 +57,13 @@ class Reward:
         if self.conflictories:
             pain = 0
             for i in range(len(self.conflictories)):
-                if traci.vehicle.getPosition('ego') is not None and traci.vehicle.getPosition(self.conflictories[i][2][0][0]) is not None:
-                    euklid_dist = np.sqrt(np.sum(np.square(np.subtract(traci.vehicle.getPosition('ego'), traci.vehicle.getPosition(self.conflictories[i][2][0][0])))))
-                    allowed_speed = traci.lane.getMaxSpeed(traci.vehicle.getLaneID(self.conflictories[i][2][0][0]))
-                    current_speed = traci.vehicle.getSpeed(self.conflictories[i][2][0][0])
+                #print(self.conflictories[i])
+                if traci.vehicle.getPosition('ego') is not None and traci.vehicle.getPosition(self.conflictories[i][1][0][0]) is not None:
+                    euklid_dist = np.sqrt(np.sum(np.square(np.subtract(traci.vehicle.getPosition('ego'), traci.vehicle.getPosition(self.conflictories[i][1][0][0])))))
+                    allowed_speed = traci.lane.getMaxSpeed(traci.vehicle.getLaneID(self.conflictories[i][1][0][0]))
+                    current_speed = traci.vehicle.getSpeed(self.conflictories[i][1][0][0])
                     deviation = 1 / np.maximum((current_speed / allowed_speed), 000.1)
-                    signals = traci.vehicle.getSignals(self.conflictories[i][2][0][0])
+                    signals = traci.vehicle.getSignals(self.conflictories[i][1][0][0])
 
                     if signals == 8 and euklid_dist < 30:
                         pain = pain + np.negative(deviation * 100)

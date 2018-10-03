@@ -360,7 +360,7 @@ class Framework:
         for i in range(len(function1)):
             for j in range(len(function2)):
                 if self.getEuclideanDistance(function1[i], function2[j]) < 1:
-                    return function1[i+1], function1[i-1], function2[j], function2[j-1], function2[j+2]
+                    return function1[i+1], function1[i-1], function2[j], function2[j-1], function2[j+1]
         return 0, 0
 
 
