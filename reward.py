@@ -26,9 +26,11 @@ class Reward:
         current_speed = traci.vehicle.getSpeed(self.carID)
         deviation = allowed_speed - current_speed
         if deviation > 0:
-            return np.negative(np.absolute(np.power(deviation, 1.5)))
-        elif deviation < 0:
+            #print(np.negative(np.absolute(np.power(deviation, 2))))
             return np.negative(np.absolute(np.power(deviation, 2)))
+        elif deviation < 0:
+            #print(np.negative(np.absolute(np.power(deviation, 3))))
+            return np.negative(np.absolute(np.power(deviation, 3)))
 
     # def collision(self):
     #     pain = 10000
@@ -76,22 +78,27 @@ class Reward:
 
 
     def emergency_gap(self):
-        #critical_space = self.tensor[0:30]
-        critical_space = self.tensor
-
+        critical_space = self.tensor[0:200]
+        #critical_space = self.tensor
+        pain = 0
         for i in range(len(critical_space)):
             #print('len', len(critical_space))
             #print(critical_space[i, 0], critical_space[i, 1], critical_space[i, 2])
-            if critical_space[i, 2] < critical_space[i, 1]:
-                if critical_space[i, 2] > critical_space[i, 0]:
+            if critical_space[i, 0] < critical_space[i, 2] < critical_space[i, 1]:
+                #if critical_space[i, 2] > :
                     #print(np.sum(critical_space[i]))
-                    if np.sum(critical_space[i]) < 2:
+                    if np.sum(critical_space[i]) < 3:
                         print('# Collision #')
                         return -20000, True
                     else:
+                        #print('Collision course')
                         return -1000, False
                     # elif np.sum(critical_space[i]) < 8:
                     #     return -1000
+                # else:
+                #     pain = pain + 10
+            #else:
+                #pain = pain + 1
 
         return 0, False
 

@@ -105,9 +105,9 @@ if __name__ == "__main__":
 
     runner.run(episodes=num_episodes, max_episode_timesteps=10000, episode_finished=episode_finished)
 
-    print("Learning finished. Total episodes: {ep}. Average reward of last 100 episodes: {ar}.".format(
+    print("Learning finished. Total episodes: {ep}. Average reward of last 1000 episodes: {ar}.".format(
         ep=runner.episode,
-        ar=np.mean(runner.episode_rewards[-100:])))
+        ar=np.mean(runner.episode_rewards[-1000:])))
     runner.close()
 
 

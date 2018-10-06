@@ -123,7 +123,7 @@ class Engine(Environment):
         # demand per second from different directions
         pN1 = 1. / 6
         pN2 = 1. / 3
-        pS1 = 1. / 12
+        pS1 = 1. / 6
         pS2 = 2. / 3
         with open("./one_lane/one_lane.rou.xml", "w") as routes:
             print("""<routes>

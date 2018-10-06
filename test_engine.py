@@ -129,7 +129,7 @@ class Engine(Environment):
         #np.random.seed(42)  # make tests reproducible
         N = 200  # number of time steps
         # demand per second from different directions
-        pN1 = 1. / 6
+        pN1 = 1. / 12
         pN2 = 1. / 3
         pS1 = 1. / 12
         pS2 = 2. / 3

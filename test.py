@@ -77,14 +77,15 @@ if __name__ == "__main__":
     state = t_env.reset()
     while not terminal:
         action = agent.act(state)
+        print(traci.vehicle.getSpeed('ego'))
         if action == 0:
-            print('+ acc')
-        elif action == 1:
             print('- dec')
+        elif action == 1:
+            print('+ acc')
         else:
             print('= rem')
         state, terminal, reward = t_env.execute(action)
-        print(state)
+        #print(state)
         #print(reward)
 
 
