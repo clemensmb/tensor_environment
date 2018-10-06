@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     env = Engine('ego')
 
-    num_episodes = 1000
+    num_episodes = 10000
 
 
     # network = [
