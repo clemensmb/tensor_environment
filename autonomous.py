@@ -49,6 +49,7 @@ class Autonomous:
         distances_to_intercept = []
         ego_position = traci.vehicle.getPosition(self.carID)
         ego_angle = traci.vehicle.getAngle(self.carID)
+        #print(self.framework)
         for i in range(len(self.framework)):
             interc_ego, real_interc_ego, interc_other, pre_interc_other, post_interc_other, inc, link, outg, index = self.framework[i]
             coordinate_angle = self.getAngleBetweenCoordinates(ego_position, self.framework[i][0])

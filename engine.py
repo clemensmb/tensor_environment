@@ -29,7 +29,7 @@ class Engine(Environment):
     def reset(self):
         self.generate_routefile()
         #traci.load(["-c", "two_intersections/two_intersections.sumocfg", "--collision.check-junctions", "1"])
-        traci.load(["-c", "one_lane/one_lane.sumocfg", "--collision.check-junctions", "1"])
+        traci.load(["-c", "one_lane/one_lane.sumocfg", "--collision.check-junctions", "1", '--no-step-log', 'true'])
 
         run = Assembler(self.carID)
 
@@ -58,8 +58,9 @@ class Engine(Environment):
         self.output = run.getTensor()
         if self.output is None:
             term = True
-            return self.getObservation(), term, 0
-        rew = Reward('ego', run.getRelevantTraffic())
+            #print('is none')
+            return self.getObservation(), term, 10000
+        rew = Reward('ego', run.getTraffic(), self.output)
 
         coll, term = rew.collision()
         if term is True:
@@ -84,12 +85,14 @@ class Engine(Environment):
             act.remain()
             #print('rem')
 
+        gap, term = rew.emergency_gap()
 
-        #win = rew.target()
         brake = rew.emergency_brake()
-
-        cost = rew.optimum_speed_deviation() + brake
+        #print(self.output[0:20])
+        #print(gap)
+        cost = rew.optimum_speed_deviation() + brake + gap
         traci.simulationStep()
+        #print(self.getObservation())
 
         return self.getObservation(), term, cost
 
@@ -105,7 +108,12 @@ class Engine(Environment):
 
 
     def getObservation(self):
-        return self.output
+        if self.output is not None:
+            tensor = np.reshape(self.output[0:200], 600)
+        else:
+            tensor = None
+
+        return tensor
 
 
 
@@ -113,9 +121,9 @@ class Engine(Environment):
         #np.random.seed(42)  # make tests reproducible
         N = 200  # number of time steps
         # demand per second from different directions
-        pN1 = 1. / 4
+        pN1 = 1. / 6
         pN2 = 1. / 3
-        pS1 = 1. / 3
+        pS1 = 1. / 12
         pS2 = 2. / 3
         with open("./one_lane/one_lane.rou.xml", "w") as routes:
             print("""<routes>
@@ -133,11 +141,11 @@ class Engine(Environment):
                     print('    <vehicle id="right_%i" type="Car" route="n2s" depart="%i" />' % (vehNr, i), file=routes)
                     vehNr += 1
                     lastVeh = i
-                if np.random.uniform(0, 1) < pN2:
-                    print('    <vehicle id="right_%i" type="Car" route="n2s" depart="%i" />' % (vehNr, i), file=routes)
-                    vehNr += 1
-                    lastVeh = i
-                if i == 5:
+                # if np.random.uniform(0, 1) < pN2:
+                #     print('    <vehicle id="right_%i" type="Car" route="n2s" depart="%i" />' % (vehNr, i), file=routes)
+                #     vehNr += 1
+                #     lastVeh = i
+                if i == 10:
                     print('    <vehicle id="ego" type="Car" route="w2e" depart="%i" />' % i, file=routes)
                     vehNr += 1
                     lastVeh = i
@@ -146,11 +154,11 @@ class Engine(Environment):
                         vehNr, i), file=routes)
                     vehNr += 1
                     lastVeh = i
-                if np.random.uniform(0, 1) < pS2:
-                    print('    <vehicle id="left_%i" type="Car" route="s2n" depart="%i" />' % (
-                        vehNr, i), file=routes)
-                    vehNr += 1
-                    lastVeh = i
+                # if np.random.uniform(0, 1) < pS2:
+                #     print('    <vehicle id="left_%i" type="Car" route="s2n" depart="%i" />' % (
+                #         vehNr, i), file=routes)
+                #     vehNr += 1
+                #     lastVeh = i
             print("</routes>", file=routes)
 
     def generate_routefile_three_lanes(self):

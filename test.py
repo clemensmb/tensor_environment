@@ -41,19 +41,13 @@ if __name__ == "__main__":
 
     t_env = Engine('ego')
 
-    # network = [
-    #     dict(type='flatten'),
-    #     dict(type='dense', size=32),
-    #     dict(type='dense', size=32)
-    # ]
-    #
-    # with open("./agent_specs/dqn_test.json", "r") as fp:
-    #     agent_config = json.load(fp=fp)
 
-    with open("./agent_specs/ppo.json", "r") as fp:
+
+    with open("./agent_specs/ppo_test.json", "r") as fp:
             agent_config = json.load(fp=fp)
 
-    with open("./agent_specs/mlp2_network.json", "r") as fp:
+    # with open("./agent_specs/mlp2_network.json", "r") as fp:
+    with open("./agent_specs/mlp2_lstm_network.json", "r") as fp:
             network = json.load(fp=fp)
 
     agent = Agent.from_spec(
@@ -65,34 +59,54 @@ if __name__ == "__main__":
         )
     )
 
-    terminal = False
     #agent.restore_model(directory="./models/", file='-7065')
     agent.restore_model(directory="./models/")
     #t_env.generate_routefile()
     #traci.start(['sumo-gui', "-c", "huge_crossing/huge_crossing.sumocfg"])
 
-    #traci.start(['sumo-gui', "-c", "one_lane/one_lane.sumocfg"])
+    traci.start(['sumo-gui', "-c", "one_lane/one_lane.sumocfg","--start", '--no-step-log', 'true'])
 
-    #traci.start(['sumo-gui', "-c", "three_lanes/three_lanes.sumocfg", "--start"])
 
-    # #t_env.generate_routefile_two_intersections()
-    # #traci.start(['sumo-gui', "-c", "two_intersections/two_intersections.sumocfg", "--start"])
 
     ###
-    traci.start(['sumo-gui', "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
+    #traci.start(['sumo-gui', "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
 
 
-    #traci.start(['sumo', "-c", "three_lanes/three_lanes.sumocfg"])
-
-    #traci.start(['sumo', "-c", "one_lane/one_lane.sumocfg"])
+    terminal = False
 
     state = t_env.reset()
     while not terminal:
         action = agent.act(state)
-        print(action)
+        if action == 0:
+            print('+ acc')
+        elif action == 1:
+            print('- dec')
+        else:
+            print('= rem')
         state, terminal, reward = t_env.execute(action)
         print(state)
-        print(reward)
+        #print(reward)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     # sumo_env = Engine_Test('ego')
     #

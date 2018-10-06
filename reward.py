@@ -15,9 +15,10 @@ class Reward:
     #     self.carID = carID
     #     self.tensor = tensor
 
-    def __init__(self, carID, rel):
+    def __init__(self, carID, rel, tensor):
         self.carID = carID
         self.conflictories = rel
+        self.tensor = tensor
 
 
     def optimum_speed_deviation(self):
@@ -46,9 +47,9 @@ class Reward:
 
     def collision(self):
         #print('###', traci.simulation.getCollidingVehiclesIDList())
-        if 'ego' in traci.simulation.getCollidingVehiclesIDList():
-        #if len(traci.simulation.getStartingTeleportIDList()) > 0:
-            return -10000, True
+        #if 'ego' in traci.simulation.getCollidingVehiclesIDList():
+        if len(traci.simulation.getStartingTeleportIDList()) > 0:
+            return -20000, True
         else:
             return 0, False
 
@@ -58,45 +59,62 @@ class Reward:
             pain = 0
             for i in range(len(self.conflictories)):
                 #print(self.conflictories[i])
-                if traci.vehicle.getPosition('ego') is not None and traci.vehicle.getPosition(self.conflictories[i][1][0][0]) is not None:
-                    euklid_dist = np.sqrt(np.sum(np.square(np.subtract(traci.vehicle.getPosition('ego'), traci.vehicle.getPosition(self.conflictories[i][1][0][0])))))
-                    allowed_speed = traci.lane.getMaxSpeed(traci.vehicle.getLaneID(self.conflictories[i][1][0][0]))
-                    current_speed = traci.vehicle.getSpeed(self.conflictories[i][1][0][0])
-                    deviation = 1 / np.maximum((current_speed / allowed_speed), 000.1)
-                    signals = traci.vehicle.getSignals(self.conflictories[i][1][0][0])
+                if traci.vehicle.getPosition('ego') is not None:
+                    if self.conflictories[i][2]:
+                        euklid_dist = np.sqrt(np.sum(np.square(np.subtract(traci.vehicle.getPosition('ego'), traci.vehicle.getPosition(self.conflictories[i][2][0][0])))))
+                        allowed_speed = traci.lane.getMaxSpeed(traci.vehicle.getLaneID(self.conflictories[i][2][0][0]))
+                        current_speed = traci.vehicle.getSpeed(self.conflictories[i][2][0][0])
+                        deviation = 1 / np.maximum((current_speed / allowed_speed), 000.1)
+                        signals = traci.vehicle.getSignals(self.conflictories[i][2][0][0])
 
-                    if signals == 8 and euklid_dist < 30:
-                        pain = pain + np.negative(deviation * 100)
+                        if signals == 8 and euklid_dist < 30:
+                            pain = pain + np.negative(deviation * 300)
                 #print('###',pain)
                 return pain
         else:
             return 0
 
 
+    def emergency_gap(self):
+        #critical_space = self.tensor[0:30]
+        critical_space = self.tensor
 
-        # 0
-        # 17.571608212423886
-        # 13.89
+        for i in range(len(critical_space)):
+            #print('len', len(critical_space))
+            #print(critical_space[i, 0], critical_space[i, 1], critical_space[i, 2])
+            if critical_space[i, 2] < critical_space[i, 1]:
+                if critical_space[i, 2] > critical_space[i, 0]:
+                    #print(np.sum(critical_space[i]))
+                    if np.sum(critical_space[i]) < 2:
+                        print('# Collision #')
+                        return -20000, True
+                    else:
+                        return -1000, False
+                    # elif np.sum(critical_space[i]) < 8:
+                    #     return -1000
 
-        # 0
-        # 31.222660252413277
-        # 13.89
+        return 0, False
 
-        # 0
-        # 39.72652898441444
-        # 13.89
 
-        # 8
-        # 7.0545658130535704
-        # 12.89
 
-        # 0
-        # 155.27166319877978
-        # 8.8
 
-        # 8
-        # 20.09021599642559
-        # 12.89
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

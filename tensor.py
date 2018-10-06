@@ -160,8 +160,8 @@ class Tensor:
                 #corridor[0:dist_to_pbi-1, 0] = -1
                 corridor[0:dist_to_pbi-1, 2] = 0
 
-                corridor[dist_to_pbi-1:dist_to_pai-1, 0] = np.round(self.relevant_tfc[i][1][0][1], decimals=2)
-                corridor[dist_to_pbi-1:dist_to_pai-1, 1] = np.round(self.relevant_tfc[i][1][0][2], decimals=2)
+                corridor[dist_to_pbi-1:dist_to_pai-1, 0] = np.maximum(np.round(self.relevant_tfc[i][1][0][1], decimals=2) - 0.2, 0)
+                corridor[dist_to_pbi-1:dist_to_pai-1, 1] = np.round(self.relevant_tfc[i][1][0][2], decimals=2) + 0.2
                 corridor[dist_to_pbi-1:dist_to_pai-1, 2] = np.round(self.ego_safety[i][2], decimals=2)
 
 
@@ -179,20 +179,20 @@ class Tensor:
                     corridor[int(slot_range[i-1][3] / sd)-1:int(slot_range[i][2] / sd)-1, 2] = np.round(slot_range[i-1][3] / self.avoid_div_zero(ego_speed), decimals=2)
 
 
-                    corridor[dist_to_pbi-1:dist_to_pai-1, 0] = np.round(self.relevant_tfc[i][1][0][1], decimals=2)
-                    corridor[dist_to_pbi-1:dist_to_pai-1, 1] = np.round(self.relevant_tfc[i][1][0][2], decimals=2)
+                    corridor[dist_to_pbi-1:dist_to_pai-1, 0] = np.maximum(np.round(self.relevant_tfc[i][1][0][1], decimals=2) - 0.2, 0)
+                    corridor[dist_to_pbi-1:dist_to_pai-1, 1] = np.round(self.relevant_tfc[i][1][0][2], decimals=2) + 0.2
                     corridor[dist_to_pbi-1:dist_to_pai-1, 2] = np.round(self.ego_safety[i][2], decimals=2)
 
                     corridor[int(slot_range[-1][3] / sd)-1:200, 2] = np.round(slot_range[-1][3] / self.avoid_div_zero(ego_speed), decimals=2)
 
-        #return corridor[0:200]
+        return corridor[0:200]
         #print(corridor[0:200])
         #tensor = np.ravel(np.transpose(corridor[0:200]))
-        tensor = np.reshape(corridor[0:200], 600)
+        #tensor = np.reshape(corridor[0:200], 600)
         #print(tensor)
         #print(tensor.shape())
 
-        return tensor
+        #return tensor
 
 
 

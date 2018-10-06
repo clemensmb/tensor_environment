@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     env = Engine('ego')
 
-    num_episodes = 5000
+    num_episodes = 1000
 
 
     # network = [
@@ -52,20 +52,31 @@ if __name__ == "__main__":
     # ]
 
     #with open ("./agent_specs/dqn.json", "r") as fp:
-    with open("./agent_specs/ppo.json", "r") as fp:
+    with open("./agent_specs/ppo_test.json", "r") as fp:
             agent_config = json.load(fp=fp)
 
-    with open("./agent_specs/mlp2_network.json", "r") as fp:
-    #with open("./agent_specs/cnn_dqn_network.json", "r") as fp:
+    #with open("./agent_specs/mlp2_network.json", "r") as fp:
+    with open("./agent_specs/mlp2_lstm_network.json", "r") as fp:
             network = json.load(fp=fp)
+
+
 
     agent = Agent.from_spec(
         spec=agent_config,
         kwargs=dict(
             states=env.states,
             actions=env.actions,
-            network=network
-        )
+            network=network,
+            # summarizer=dict(directory="./board/",
+            #                   steps=50,
+            #                   labels=['configuration',
+            #                           'gradients_scalar',
+            #                           'regularization',
+            #                           'inputs',
+            #                           'losses',
+            #                           'variables']
+            #                   ),
+    )
     )
 
 
@@ -74,7 +85,7 @@ if __name__ == "__main__":
 
     def episode_finished(r):
         print(
-            "\n     Finished episode {ep} after {ts} timesteps (reward: {reward})".format(ep=r.episode, ts=r.episode_timestep,
+            "Finished episode {ep} after {ts} timesteps (reward: {reward})".format(ep=r.episode, ts=r.episode_timestep,
                                                                                    reward=r.episode_rewards[-1]))
         if r.episode == num_episodes:
             r.agent.save_model(directory="./models/")
@@ -84,14 +95,15 @@ if __name__ == "__main__":
 
     print("Starting {agent} for Environment '{env}'".format(agent=agent, env=env))
 
-    env.generate_routefile_two_intersections()
+    #env.generate_routefile_two_intersections()
     #traci.start(['sumo-gui', "-c", "two_intersections/two_intersections.sumocfg", "--start"])
     #traci.start(['sumo', "-c", "two_intersections/two_intersections.sumocfg"])
-    traci.start(['sumo-gui', "-c", "one_lane/one_lane.sumocfg"])
+    traci.start(['sumo', "-c", "one_lane/one_lane.sumocfg", '--no-step-log', 'true'])
+    #traci.start(['sumo-gui', "-c", "one_lane/one_lane.sumocfg", "--start"])
 
 
 
-    runner.run(episodes=num_episodes, max_episode_timesteps=300, episode_finished=episode_finished)
+    runner.run(episodes=num_episodes, max_episode_timesteps=10000, episode_finished=episode_finished)
 
     print("Learning finished. Total episodes: {ep}. Average reward of last 100 episodes: {ar}.".format(
         ep=runner.episode,

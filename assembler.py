@@ -58,38 +58,46 @@ class Assembler:
 
 
                 if intersections is not None:
-                    if len(ego_trajectory) > 1:
-                        framework = fw.getTensorFramework(carID, intersections, ego_trajectory)
+                    #if len(ego_trajectory) > 1:
+                    framework = fw.getTensorFramework(carID, intersections, ego_trajectory)
 
-                        auto = Autonomous(carID, framework, ego_trajectory)
+                    auto = Autonomous(carID, framework, ego_trajectory)
 
-                        distances = auto.getDistanceToIntercept()
+                    distances = auto.getDistanceToIntercept()
 
-                        tfc = Traffic(distances)
+                    tfc = Traffic(distances)
 
-                        vehicles = tfc.getConflictoryTraffic()
+                    vehicles = tfc.getConflictoryTraffic()
 
-                        distances_tfc = tfc.getDistanceToIntercept(vehicles)
+                    distances_tfc = tfc.getDistanceToIntercept(vehicles)
 
-                        safe = Safety(carID, framework, distances, distances_tfc)
+                    safe = Safety(carID, framework, distances, distances_tfc)
 
-                        trc_safety = safe.getTrafficSafetyMeasures()
-                        #print(len(distances), len(trc_safety))
+                    trc_safety = safe.getTrafficSafetyMeasures()
+                    #print(len(distances), len(trc_safety))
 
-                        ego_safety = safe.getEgoSafetyMeasures()
-                        #print(ego_safety)
+                    ego_safety = safe.getEgoSafetyMeasures()
+                    #print(ego_safety)
 
-                        prio = safe.getPriotizedTraffic(ego_safety, trc_safety)
+                    prio = safe.getPriotizedTraffic(ego_safety, trc_safety)
 
-                        rel = safe.getRelevantTraffic(prio)
-                        #print(rel)
+                    rel = safe.getRelevantTraffic(prio)
+                    #print(rel)
 
-                        # for i in range(len(rel)):
-                        #     if rel[i][1]:
-                        #         safe.getEgoSecurityDistance(carID, rel[i][1][0][0])
+                    # for i in range(len(rel)):
+                    #     if rel[i][1]:
+                    #         safe.getEgoSecurityDistance(carID, rel[i][1][0][0])
 
-                        env = Tensor(carID, distances, rel, ego_safety, ego_trajectory)
-                        env.createEnvironmentTensor()
+                    env = Tensor(carID, distances, rel, ego_safety, ego_trajectory)
+                    env.createEnvironmentTensor()
+                    print(env.createEnvironmentTensor()
+)
+                else:
+                    corridor = np.full((200, 3), fill_value=-1.0)
+
+                    corridor[0:199, 2] = 0
+                    corridor[199:200, 2] = 100 / np.maximum(traci.vehicle.getSpeed(carID), 0.0001)
+                    print(corridor)
 
             step += 1
         traci.close()
@@ -105,7 +113,7 @@ class Assembler:
             intersections = fw.getIntersectingTrajectories(self.carID, ego_trajectory)
 
             if intersections is not None:
-                if len(ego_trajectory) > 1:
+                #if len(ego_trajectory) > 1:
                     framework = fw.getTensorFramework(self.carID, intersections, ego_trajectory)
 
                     auto = Autonomous(self.carID, framework, ego_trajectory)
@@ -139,8 +147,18 @@ class Assembler:
                     #         safe.getEgoSecurityDistance(carID, rel[i][1][0][0])
 
                     env = Tensor(self.carID, distances, rel, ego_safety, ego_trajectory)
+                    #print(env.createEnvironmentTensor())
 
                     return env.createEnvironmentTensor()
+            else:
+                corridor = np.full((200, 3), fill_value=-1.0)
+
+                corridor[0:199, 2] = 0
+                corridor[199:200, 2] = 100 / np.maximum(traci.vehicle.getSpeed(self.carID), 0.0001)
+
+                #tensor = np.reshape(corridor[0:200], 600)
+
+                return corridor
 
     def getRelevantTraffic(self):
         return self.rel
@@ -163,7 +181,9 @@ if __name__ == "__main__":
     #traci.start(["sumo-gui", "-c", "two_intersections/two_intersections.sumocfg", "--start"])
     #traci.start(["sumo", "-c", "two_intersections/two_intersections.sumocfg", "--start"])
 
-    traci.start(["sumo-gui", "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
+    #traci.start(["sumo-gui", "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
+    traci.start(['sumo-gui', "-c", "one_lane/one_lane.sumocfg","--start"])
+
     # traci.start(["sumo", "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
 
     assemble = Assembler('ego')
