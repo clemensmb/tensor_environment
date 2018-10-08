@@ -90,14 +90,13 @@ class Assembler:
 
                     env = Tensor(carID, distances, rel, ego_safety, ego_trajectory)
                     env.createEnvironmentTensor()
-                    print(env.createEnvironmentTensor()
-)
+                    #print(env.createEnvironmentTensor())
                 else:
                     corridor = np.full((200, 3), fill_value=-1.0)
 
-                    corridor[0:199, 2] = 0
-                    corridor[199:200, 2] = 100 / np.maximum(traci.vehicle.getSpeed(carID), 0.0001)
-                    print(corridor)
+                    corridor[0:200, 2] = 100 / np.maximum(traci.vehicle.getSpeed(self.carID), 0.001)
+
+                    #print(corridor)
 
             step += 1
         traci.close()
@@ -138,6 +137,8 @@ class Assembler:
                     prio = safe.getPriotizedTraffic(ego_safety, trc_safety)
 
                     rel = safe.getRelevantTraffic(prio)
+                    #print('\n', prio)
+                    #print(rel)
                     self.rel = rel
 
                     # print(rel)
@@ -153,8 +154,8 @@ class Assembler:
             else:
                 corridor = np.full((200, 3), fill_value=-1.0)
 
-                corridor[0:199, 2] = 0
-                corridor[199:200, 2] = 100 / np.maximum(traci.vehicle.getSpeed(self.carID), 0.0001)
+                #corridor[0:199, 2] = 0
+                corridor[0:200, 2] = 100 / np.maximum(traci.vehicle.getSpeed(self.carID), 0.001)
 
                 #tensor = np.reshape(corridor[0:200], 600)
 
@@ -182,7 +183,7 @@ if __name__ == "__main__":
     #traci.start(["sumo", "-c", "two_intersections/two_intersections.sumocfg", "--start"])
 
     #traci.start(["sumo-gui", "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
-    traci.start(['sumo-gui', "-c", "one_lane/one_lane.sumocfg","--start"])
+    traci.start(['sumo', "-c", "one_lane/one_lane.sumocfg","--start"])
 
     # traci.start(["sumo", "-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--start"])
 

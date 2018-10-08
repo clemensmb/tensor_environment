@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     env = Engine('ego')
 
-    num_episodes = 10000
+    num_episodes = 500000
 
 
     # network = [
@@ -98,7 +98,18 @@ if __name__ == "__main__":
     #env.generate_routefile_two_intersections()
     #traci.start(['sumo-gui', "-c", "two_intersections/two_intersections.sumocfg", "--start"])
     #traci.start(['sumo', "-c", "two_intersections/two_intersections.sumocfg"])
-    traci.start(['sumo', "-c", "one_lane/one_lane.sumocfg", '--no-step-log', 'true'])
+
+
+
+    traci.start(['sumo', "-c", "one_lane/one_lane4.sumocfg", '--no-step-log', 'true'])
+
+    #traci.start(['sumo', "-c", "one_lane/one_lane2.sumocfg", '--no-step-log', 'true'])
+
+    #traci.start(['sumo', "-c", "one_lane/one_lane3.sumocfg", '--no-step-log', 'true'])
+
+
+
+
     #traci.start(['sumo-gui', "-c", "one_lane/one_lane.sumocfg", "--start"])
 
 

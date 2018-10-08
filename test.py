@@ -64,7 +64,7 @@ if __name__ == "__main__":
     #t_env.generate_routefile()
     #traci.start(['sumo-gui', "-c", "huge_crossing/huge_crossing.sumocfg"])
 
-    traci.start(['sumo-gui', "-c", "one_lane/one_lane.sumocfg","--start", '--no-step-log', 'true'])
+    traci.start(['sumo-gui', "-c", "one_lane/one_lane4.sumocfg","--start", '--no-step-log', 'true'])
 
 
 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
             print('= rem')
         state, terminal, reward = t_env.execute(action)
         #print(state)
-        #print(reward)
+        print(reward)
 
 
 

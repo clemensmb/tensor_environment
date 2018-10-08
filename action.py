@@ -26,12 +26,12 @@ class Action:
 
     def accelerate(self):
         current_speed = traci.vehicle.getSpeed(self.carID)
-        target_speed = current_speed + 2
+        target_speed = current_speed + 1
         traci.vehicle.setSpeed(self.carID, target_speed)
 
     def decelerate(self):
         current_speed = traci.vehicle.getSpeed(self.carID)
-        target_speed = current_speed - 2
+        target_speed = current_speed - 1.5
         traci.vehicle.setSpeed(self.carID, target_speed)
 
     def remain(self):

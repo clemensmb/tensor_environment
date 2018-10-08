@@ -36,7 +36,7 @@ class Safety:
         Avoids division by zero
         """
         if number == 0:
-            return 0.001
+            return 0.01
         else:
             return number
 
@@ -327,7 +327,17 @@ class Safety:
 
 
     def getRelevantTraffic(self, prio):
-        #print(prio)
+        #print('\n',prio)
+        speed = traci.vehicle.getSpeed(self.carID)
+        #print(speed)
+
+        if speed > 11:
+            time_gap = 2
+        elif 11 >= speed > 8:
+            time_gap = 4
+        else:
+            time_gap = 6
+
 
         relevant_traffic = []
         for i in range(len(prio)):
@@ -335,10 +345,22 @@ class Safety:
                 relevant = [(prio[i][1][0][0], prio[i][1][0][2], prio[i][1][0][3])]
                 if len(prio[i][1]) > 1:
                     for j in range(len(prio[i][1])):
+                        #print(j , len(prio[i][1]))
                         if j+1 < len(prio[i][1]):
-                            if np.absolute(prio[i][1][j][2] - prio[i][1][j+1][2]) < 2:
-                                relevant.append((prio[i][1][j+1][0], prio[i][1][j+1][2], prio[i][1][j+1][3]))
-                relevant_traffic.append((prio[i][0], relevant))
+                            #print(relevant[-1][1] - prio[i][1][j+1][2])
+                            if relevant[-1][1] - prio[i][1][j+1][2] < 0:
+                                #print(relevant[-1][1] - prio[i][1][j + 1][2])
+                                if relevant[-1][1] - prio[i][1][j + 1][2] > -time_gap:
+                                    relevant.append((prio[i][1][j+1][0], prio[i][1][j+1][2], prio[i][1][j+1][3]))
+                            else:
+                                #print(relevant[-1][1] - prio[i][1][j + 1][2])
+                                if relevant[0][1] - prio[i][1][j + 1][2] < time_gap:
+                                    relevant.insert(0, (prio[i][1][j+1][0], prio[i][1][j+1][2], prio[i][1][j+1][3]))
+                propagated_relevant = [(prio[i][1][0][0], relevant[0][1], relevant[-1][2])]
+                relevant_traffic.append((prio[i][0], propagated_relevant))
+
+
+
             else:
                 relevant_traffic.append((prio[i][0], [(None, -1, -1)]))
         #print(relevant_traffic)

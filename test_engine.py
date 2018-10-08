@@ -29,7 +29,7 @@ class Engine(Environment):
         ###
         #self.generate_routefile_two_intersections()
         self.generate_routefile()
-        traci.load(["-c", "one_lane/one_lane.sumocfg", "--collision.check-junctions", "1", "--start", '--no-step-log', 'true'])
+        traci.load(["-c", "one_lane/one_lane4.sumocfg", "--collision.check-junctions", "1", "--start", '--no-step-log', 'true'])
 
         ###
         #traci.load(["-c", "one_intersection_w_priority/one_intersection_w_priority.sumocfg", "--collision.check-junctions", "1", "--start"])
@@ -95,10 +95,12 @@ class Engine(Environment):
             act.remain()
             # print('rem')
         gap, term = rew.emergency_gap()
+        wary = rew.wary_before_intersection()
+
 
         #win = rew.target()
         brake = rew.emergency_brake()
-        cost = rew.optimum_speed_deviation() + brake + gap
+        cost = rew.optimum_speed_deviation() + brake + gap + wary
         traci.simulationStep()
         #print(self.output)
 
@@ -133,9 +135,9 @@ class Engine(Environment):
         pN2 = 1. / 3
         pS1 = 1. / 12
         pS2 = 2. / 3
-        with open("./one_lane/one_lane.rou.xml", "w") as routes:
+        with open("./one_lane/one_lane4.rou.xml", "w") as routes:
             print("""<routes>
-            <vType accel="1.0" decel="5.0" id="Car" length="4.0" maxSpeed="100.0" sigma="0.0" departSpeed="13.89"/>
+            <vType accel="1.0" decel="5.0" id="Car" length="4.0" maxSpeed="20.0" sigma="0.0" departSpeed="13.89"/>
             
             <route id="n2s" edges="gneE2 -gneE3" />
             <route id="s2n" edges="gneE3 -gneE2" />
@@ -179,7 +181,7 @@ class Engine(Environment):
         pS2 = 2. / 3
         with open("./three_lanes/three_lanes.rou.xml", "w") as routes:
             print("""<routes>
-            <vType accel="1.0" decel="5.0" id="Car" length="4.0" maxSpeed="100.0" sigma="0.0" departSpeed="13.89"/>
+            <vType accel="1.0" decel="5.0" id="Car" length="4.0" maxSpeed="20.0" sigma="0.0" departSpeed="13.89"/>
 
             <route id="n2s" edges="gneE2 -gneE3" />
             <route id="s2n" edges="gneE3 -gneE2" />
@@ -227,7 +229,7 @@ class Engine(Environment):
         pS2 = 1. / 3
         with open("./two_intersections/two_intersections.rou.xml", "w") as routes:
             print("""<routes>
-            <vType accel="1.0" decel="5.0" id="Car" length="4.0" maxSpeed="50.0" sigma="0.0" departSpeed="13.89"/>
+            <vType accel="1.0" decel="5.0" id="Car" length="4.0" maxSpeed="20.0" sigma="0.0" departSpeed="13.89"/>
     
             <route id="n2s" edges="gneE19 -gneE18" />
             <route id="s2n" edges="gneE18 -gneE19" />

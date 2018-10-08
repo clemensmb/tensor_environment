@@ -27,10 +27,10 @@ class Reward:
         deviation = allowed_speed - current_speed
         if deviation > 0:
             #print(np.negative(np.absolute(np.power(deviation, 2))))
-            return np.negative(np.absolute(np.power(deviation, 2)))
+            return np.negative(np.absolute(np.power(deviation, 3)))
         elif deviation < 0:
             #print(np.negative(np.absolute(np.power(deviation, 3))))
-            return np.negative(np.absolute(np.power(deviation, 3)))
+            return np.negative(np.absolute(np.power(deviation, 4)))
 
     # def collision(self):
     #     pain = 10000
@@ -51,7 +51,7 @@ class Reward:
         #print('###', traci.simulation.getCollidingVehiclesIDList())
         #if 'ego' in traci.simulation.getCollidingVehiclesIDList():
         if len(traci.simulation.getStartingTeleportIDList()) > 0:
-            return -20000, True
+            return -10000, True
         else:
             return 0, False
 
@@ -70,7 +70,7 @@ class Reward:
                         signals = traci.vehicle.getSignals(self.conflictories[i][2][0][0])
 
                         if signals == 8 and euklid_dist < 30:
-                            pain = pain + np.negative(deviation * 300)
+                            pain = pain + np.negative(deviation * 500)
                 #print('###',pain)
                 return pain
         else:
@@ -79,6 +79,8 @@ class Reward:
 
     def emergency_gap(self):
         critical_space = self.tensor[0:200]
+        #critical_space = self.tensor[0:100]
+
         #critical_space = self.tensor
         pain = 0
         for i in range(len(critical_space)):
@@ -89,10 +91,10 @@ class Reward:
                     #print(np.sum(critical_space[i]))
                     if np.sum(critical_space[i]) < 3:
                         print('# Collision #')
-                        return -20000, True
+                        return -10000, True
                     else:
                         #print('Collision course')
-                        return -1000, False
+                        return -3000, False
                     # elif np.sum(critical_space[i]) < 8:
                     #     return -1000
                 # else:
@@ -100,29 +102,27 @@ class Reward:
             #else:
                 #pain = pain + 1
 
-        return 0, False
+        return 300, False
 
 
+    def wary_before_intersection(self):
+        critical_space = self.tensor[0:200]
+        allowed_speed = traci.lane.getMaxSpeed(traci.vehicle.getLaneID(self.carID))
+        current_speed = traci.vehicle.getSpeed(self.carID)
+        deviation = allowed_speed - current_speed
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if critical_space[0, 2] == 0:
+            for i in range(len(critical_space)):
+                j = np.negative(i + 1)
+                if critical_space[j, 2] != 0:
+                    if deviation > 0:
+                        return np.absolute(np.power(deviation, 2))
+                    else:
+                        return 0
+                else:
+                    return 0
+        else:
+            return 0
 
 
     # def collision(self):
