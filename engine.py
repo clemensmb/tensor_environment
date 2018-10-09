@@ -31,7 +31,7 @@ class Engine(Environment):
         #traci.load(["-c", "two_intersections/two_intersections.sumocfg", "--collision.check-junctions", "1"])
 
         #traci.load(["-c", "one_lane/one_lane4.sumocfg", "--collision.check-junctions", "1", '--no-step-log', 'true'])
-        traci.load(["-c", "one_lane/one_lane2.sumocfg", "--collision.check-junctions", "1", '--no-step-log', 'true'])
+        traci.load(["-c", "one_lane/one_lane5.sumocfg", "--collision.check-junctions", "1", '--no-step-log', 'true'])
         #traci.load(["-c", "one_lane/one_lane3.sumocfg", "--collision.check-junctions", "1", '--no-step-log', 'true'])
 
         run = Assembler(self.carID)
@@ -130,7 +130,7 @@ class Engine(Environment):
         pN2 = 1. / 3
         pS1 = 1. / 6
         pS2 = 2. / 3
-        with open("./one_lane/one_lane2.rou.xml", "w") as routes:
+        with open("./one_lane/one_lane5.rou.xml", "w") as routes:
             print("""<routes>
             <vType accel="1.0" decel="5.0" id="Car" length="4.0" maxSpeed="20.0" sigma="0.0" departSpeed="13.89"/>
     

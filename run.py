@@ -13,7 +13,7 @@ import json
 
 #from tensorforce.agents import PPOAgent
 from tensorforce.agents import DQNAgent
-from tensorforce.execution import Runner
+from tensorforce.execution import ThreadedRunner
 from tensorforce.agents import agents as AgentsDictionary, Agent
 
 
@@ -38,7 +38,8 @@ from engine import Engine
 if __name__ == "__main__":
 
 
-    env = Engine('ego')
+    env1 = Engine('ego')
+    env2 = Engine('ego')
 
     num_episodes = 500000
 
@@ -61,11 +62,11 @@ if __name__ == "__main__":
 
 
 
-    agent = Agent.from_spec(
+    agent1 = Agent.from_spec(
         spec=agent_config,
         kwargs=dict(
-            states=env.states,
-            actions=env.actions,
+            states=env1.states,
+            actions=env1.actions,
             network=network,
             # summarizer=dict(directory="./board/",
             #                   steps=50,
@@ -78,9 +79,26 @@ if __name__ == "__main__":
             #                   ),
     )
     )
+    agent2 = Agent.from_spec(
+        spec=agent_config,
+        kwargs=dict(
+            states=env2.states,
+            actions=env2.actions,
+            network=network,
+            # summarizer=dict(directory="./board/",
+            #                   steps=50,
+            #                   labels=['configuration',
+            #                           'gradients_scalar',
+            #                           'regularization',
+            #                           'inputs',
+            #                           'losses',
+            #                           'variables']
+            #                   ),
+        )
+    )
 
 
-    runner = Runner(agent, env)
+    runner = ThreadedRunner([agent1, agent2], [env1, env2])
 
 
     def episode_finished(r):
@@ -93,7 +111,9 @@ if __name__ == "__main__":
         return True
 
 
-    print("Starting {agent} for Environment '{env}'".format(agent=agent, env=env))
+    print("Starting {agent} for Environment '{env}'".format(agent=agent1, env=env1))
+    print("Starting {agent} for Environment '{env}'".format(agent=agent2, env=env2))
+
 
     #env.generate_routefile_two_intersections()
     #traci.start(['sumo-gui', "-c", "two_intersections/two_intersections.sumocfg", "--start"])
@@ -103,7 +123,7 @@ if __name__ == "__main__":
 
     #traci.start(['sumo', "-c", "one_lane/one_lane4.sumocfg", '--no-step-log', 'true'])
 
-    traci.start(['sumo', "-c", "one_lane/one_lane2.sumocfg", '--no-step-log', 'true'])
+    traci.start(['sumo', "-c", "one_lane/one_lane5.sumocfg", '--no-step-log', 'true'])
 
     #traci.start(['sumo', "-c", "one_lane/one_lane3.sumocfg", '--no-step-log', 'true'])
 
